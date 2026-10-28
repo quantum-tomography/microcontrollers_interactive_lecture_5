@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microcontroller Architecture: Interactive Lecture Deck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    code, pre {
+      font-family: 'Fira Code', monospace;
+    }
+    .slide-enter {
+      animation: fadeIn 0.35s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- Top Navigation Header -->
+  <header class="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur sticky top-0 z-50 px-4 py-3 sm:px-8">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 bg-sky-500/10 text-sky-400 rounded-xl border border-sky-500/20 shadow-sm">
+          <i data-lucide="cpu" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-base sm:text-lg leading-tight text-white tracking-tight">Microcontroller Architecture</h1>
+          <p class="text-xs text-slate-400">Interactive Technical Lecture Deck</p>
+        </div>
+      </div>
+
+      <!-- Slide Navigation Progress -->
+  <div class="flex items-center space-x-4">
+    <div class="hidden md:flex flex-col items-end mr-2">
+      <span id="slide-number" class="text-xs font-semibold text-slate-300">Slide 1 of 7</span>
+      <span id="slide-title-preview" class="text-[11px] text-sky-400 font-mono">Program Memory</span>
+    </div>
+    <div class="w-28 sm:w-36 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700/50">
+      <div id="progress-bar" class="bg-gradient-to-r from-sky-500 to-indigo-500 h-full transition-all duration-300 w-[14.28%]"></div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Slide Container -->
+<main class="flex-grow flex items-center justify-center p-3 sm:p-6 md:p-8">
+  <div class="max-w-5xl w-full min-h-[620px] flex flex-col">
+
+    <!-- Slide Content Container -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 sm:p-8 md:p-10 shadow-2xl backdrop-blur-md flex-grow flex flex-col justify-between relative overflow-hidden">
+      
+      <!-- Ambient Visual Background Accents -->
+      <div class="absolute -top-32 -right-32 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- SLIDE 1: PROGRAM MEMORY, PC & STACK -->
+      <section id="slide-1" class="slide-content slide-enter space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">
+          <i data-lucide="binary" class="w-3.5 h-3.5"></i> Module 1: Program Storage & Stack
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Program Memory, Program Counter & Stack</h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Program Memory contains sequential cells storing machine instructions. The <strong>Program Counter (PC)</strong> tracks the current instruction address, while the hardware <strong>Stack</strong> stores return addresses during subroutine calls and interrupts.
+        </p>
+
+        <!-- SVG Visual Diagram: Program Memory, PC & Stack -->
+        <div class="bg-slate-950/80 p-4 sm:p-6 rounded-xl border border-slate-800 my-4 flex justify-center">
+          <svg viewBox="0 0 650 180" class="w-full max-w-2xl h-auto">
+            <!-- Program Counter Box -->
+            <rect x="30" y="30" width="150" height="50" rx="8" fill="#0f172a" stroke="#0284c7" stroke-width="2"/>
+            <text x="105" y="52" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="bold">Program Counter (PC)</text>
+            <text x="105" y="68" text-anchor="middle" fill="#94a3b8" font-size="10">Active Instruction Pointer</text>
+
+            <!-- Stack Box -->
+            <rect x="30" y="105" width="150" height="50" rx="8" fill="#0f172a" stroke="#6366f1" stroke-width="2"/>
+            <text x="105" y="127" text-anchor="middle" fill="#818cf8" font-size="12" font-weight="bold">Hardware Stack</text>
+            <text x="105" y="143" text-anchor="middle" fill="#94a3b8" font-size="10">Subroutine Return Memory</text>
+
+            <!-- Bidirectional Arrow PC <-> Stack -->
+            <path d="M 105 80 L 105 105" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow-indigo)" marker-start="url(#arrow-indigo-rev)"/>
+
+            <!-- Program Address Bus Arrow -->
+            <path d="M 180 55 L 280 55" stroke="#0284c7" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+            <text x="230" y="45" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">Address Bus</text>
+
+            <!-- Program Memory Array -->
+            <rect x="280" y="20" width="340" height="140" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+            <text x="450" y="40" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="bold">Program Memory Array (Flash)</text>
+            
+            <rect x="300" y="55" width="300" height="22" rx="4" fill="#1e293b" stroke="#0284c7" stroke-width="1.5"/>
+            <text x="310" y="70" fill="#cbd5e1" font-size="10" font-mono">Address [Reset Vector]: Target Instruction</text>
+            
+            <rect x="300" y="85" width="300" height="22" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+            <text x="310" y="100" fill="#64748b" font-size="10" font-mono">Address [N]: Subroutine Entry Instruction</text>
+
+            <rect x="300" y="115" width="300" height="22" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+            <text x="310" y="130" fill="#64748b" font-size="10" font-mono">Address [N+1]: Return Target Instruction</text>
+
+            <!-- SVG Markers -->
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7"/>
+              </marker>
+              <marker id="arrow-indigo" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#818cf8"/>
+              </marker>
+              <marker id="arrow-indigo-rev" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 10 0 L 0 5 L 10 10 z" fill="#818cf8"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-3">
+          <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
+            <h3 class="font-bold text-sky-400 text-xs mb-1 flex items-center gap-1.5">
+              <i data-lucide="disc" class="w-3.5 h-3.5"></i> Program Counter
+            </h3>
+            <p class="text-[11px] text-slate-400 leading-relaxed">Generates instruction addresses continuously to advance execution through Program Memory.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
+            <h3 class="font-bold text-indigo-400 text-xs mb-1 flex items-center gap-1.5">
+              <i data-lucide="layers" class="w-3.5 h-3.5"></i> Call/Return Stack
+            </h3>
+            <p class="text-[11px] text-slate-400 leading-relaxed">Dedicated hardware stack automatically pushes PC address during CALLs and restores it on RETURNs.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
+            <h3 class="font-bold text-emerald-400 text-xs mb-1 flex items-center gap-1.5">
+              <i data-lucide="database" class="w-3.5 h-3.5"></i> Capacity Limit
+            </h3>
+            <p class="text-[11px] text-slate-400 leading-relaxed">Program memory cell capacity determines maximum application program size and instruction depth.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: DATA MEMORY & BANKED ADDRESSING -->
+      <section id="slide-2" class="slide-content hidden slide-enter space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">
+            <i data-lucide="hard-drive" class="w-3.5 h-3.5"></i> Module 2: Data Memory Architecture
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Data RAM: GPR, SFR & Banked Addressing</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Data RAM stores volatile operational state. Registers are split into user variables (GPR) and hardware controls (SFR), grouped into memory banks.
+          </p>
+
+          <!-- SVG Visual Diagram: Banked Memory -->
+          <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-slate-800 my-3 flex justify-center">
+            <svg viewBox="0 0 650 170" class="w-full max-w-2xl h-auto">
+              <!-- Full Address Field -->
+              <rect x="50" y="20" width="550" height="40" rx="8" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+              <rect x="55" y="25" width="180" height="30" rx="6" fill="#0369a1" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="145" y="44" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="bold">Upper Bits: Bank Select</text>
+              
+              <rect x="240" y="25" width="355" height="30" rx="6" fill="#4338ca" fill-opacity="0.3" stroke="#818cf8" stroke-width="1.5"/>
+              <text x="417" y="44" text-anchor="middle" fill="#818cf8" font-size="11" font-weight="bold">Lower Bits: Offset Address in Active Bank</text>
+
+              <!-- Arrow pointing down to Banks -->
+              <path d="M 145 60 L 145 85" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+              <path d="M 417 60 L 417 85" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow-indigo)"/>
+
+              <!-- Banks Boxes -->
+              <rect x="30" y="90" width="130" height="65" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="95" y="115" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="bold">Bank 0</text>
+              <text x="95" y="135" text-anchor="middle" fill="#94a3b8" font-size="10">SFR & GPR Cells</text>
+
+              <rect x="180" y="90" width="130" height="65" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+              <text x="245" y="115" text-anchor="middle" fill="#cbd5e1" font-size="11" font-weight="bold">Bank 1</text>
+              <text x="245" y="135" text-anchor="middle" fill="#64748b" font-size="10">SFR & GPR Cells</text>
+
+              <rect x="330" y="90" width="130" height="65" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+              <text x="395" y="115" text-anchor="middle" fill="#cbd5e1" font-size="11" font-weight="bold">Bank 2</text>
+              <text x="395" y="135" text-anchor="middle" fill="#64748b" font-size="10">SFR & GPR Cells</text>
+
+              <rect x="480" y="90" width="130" height="65" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+              <text x="545" y="115" text-anchor="middle" fill="#cbd5e1" font-size="11" font-weight="bold">Bank N</text>
+              <text x="545" y="135" text-anchor="middle" fill="#64748b" font-size="10">SFR & GPR Cells</text>
+            </svg>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+              <span class="inline-block px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-mono font-bold mb-2">GPR</span>
+              <h3 class="font-bold text-white text-sm mb-1">General Purpose Registers</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">Serves as RAM workspace for storing application proccessing data and program logic state variables.</p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+              <span class="inline-block px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold mb-2">SFR</span>
+              <h3 class="font-bold text-white text-sm mb-1">Special Function Registers</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">Specialized registers hardwired to hardware peripherals (I/O ports, timers, status flags) to monitor and control microcontroller operations.</p>
+            </div>
+          </div>
+        </section>
+
+      <!-- SLIDE 3: INTERACTIVE CPU ARCHITECTURE (FIG 1.9) -->
+      <section id="slide-3" class="slide-content hidden slide-enter space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">
+            <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Module 3: Complete CPU Block Diagram
+          </div>
+          <span class="text-xs text-slate-400">Click or hover over blocks to inspect components</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white tracking-tight">Interactive CPU Core & Interconnects (Fig. 1.9)</h2>
+
+        <!-- Interactive SVG Diagram based on Fig. 1.9 -->
+        <div class="bg-slate-950 p-3 sm:p-4 rounded-xl border border-slate-800 relative flex justify-center overflow-x-auto">
+          <svg viewBox="0 0 700 360" class="w-full max-w-3xl h-auto">
+            <!-- CPU Boundary Outer Box -->
+            <rect x="80" y="30" width="540" height="280" rx="12" fill="#090d16" stroke="#1e293b" stroke-width="2" stroke-dasharray="6"/>
+            <text x="95" y="48" fill="#475569" font-size="10" font-weight="bold">MICROCONTROLLER CPU CORE</text>
+
+            <!-- External Buses at Top -->
+            <!-- Program Memory Link -->
+            <path d="M 230 30 L 230 10" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/>
+            <path d="M 240 10 L 240 30" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow-down)"/>
+            <text x="235" y="8" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">Program Memory</text>
+
+            <!-- RAM Memory Link -->
+            <path d="M 480 30 L 480 10" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow-indigo)"/>
+            <path d="M 490 10 L 490 30" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow-indigo-down)"/>
+            <text x="485" y="8" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="bold">RAM Memory</text>
+
+            <!-- Instruction Bus Input -->
+            <path d="M 20 130 L 100 130" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow)"/>
+            <text x="50" y="122" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">Instruction Bus</text>
+
+            <!-- Interactive Block 1: Program Counter -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('pc')" onmouseenter="inspectCpuBlock('pc')">
+              <rect x="200" y="50" width="130" height="30" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1.5" class="group-hover:fill-sky-950 transition-all"/>
+              <text x="265" y="69" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">Program Counter</text>
+            </g>
+
+            <!-- Interactive Block 2: Stack -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('stack')" onmouseenter="inspectCpuBlock('stack')">
+              <rect x="200" y="100" width="130" height="28" rx="6" fill="#0f172a" stroke="#6366f1" stroke-width="1.5" class="group-hover:fill-indigo-950 transition-all"/>
+              <text x="265" y="118" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="bold">Hardware Stack</text>
+            </g>
+            <path d="M 265 80 L 265 100" stroke="#6366f1" stroke-width="1.5" marker-end="url(#arrow-indigo)" marker-start="url(#arrow-indigo-rev)"/>
+
+            <!-- Interactive Block 3: Instruction Register -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('ir')" onmouseenter="inspectCpuBlock('ir')">
+              <rect x="100" y="110" width="40" height="110" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" class="group-hover:fill-sky-950 transition-all"/>
+              <text x="120" y="165" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold" transform="rotate(-90 120 165)">Instruction Register</text>
+            </g>
+
+            <!-- Interactive Block 4: RAM Addressing -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('ram_addr')" onmouseenter="inspectCpuBlock('ram_addr')">
+              <rect x="430" y="55" width="120" height="35" rx="6" fill="#0f172a" stroke="#818cf8" stroke-width="1.5" class="group-hover:fill-indigo-950 transition-all"/>
+              <text x="490" y="76" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="bold">RAM Addressing</text>
+            </g>
+
+            <!-- Interactive Block 5: Instruction Decoder & Control -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('decoder')" onmouseenter="inspectCpuBlock('decoder')">
+              <rect x="180" y="225" width="140" height="40" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" class="group-hover:fill-sky-950 transition-all"/>
+              <text x="250" y="244" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold">Instruction Decoder</text>
+              <text x="250" y="256" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="bold">& Logic Control</text>
+            </g>
+
+            <!-- Interactive Block 6: MUX -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('mux')" onmouseenter="inspectCpuBlock('mux')">
+              <polygon points="410,135 480,135 465,160 425,160" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" class="group-hover:fill-sky-950 transition-all"/>
+              <text x="445" y="150" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">MUX</text>
+            </g>
+
+            <!-- Interactive Block 7: STATUS Register -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('status')" onmouseenter="inspectCpuBlock('status')">
+              <rect x="470" y="110" width="90" height="28" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" class="group-hover:fill-amber-950 transition-all"/>
+              <text x="515" y="128" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="bold">STATUS Reg</text>
+            </g>
+
+            <!-- Interactive Block 8: ALU -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('alu')" onmouseenter="inspectCpuBlock('alu')">
+              <polygon points="350,180 470,180 500,225 320,225" fill="#0f172a" stroke="#f59e0b" stroke-width="2" class="group-hover:fill-amber-950 transition-all"/>
+              <text x="410" y="208" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="bold">ALU</text>
+            </g>
+
+            <!-- Interactive Block 9: Working Register W -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('w_reg')" onmouseenter="inspectCpuBlock('w_reg')">
+              <rect x="380" y="250" width="110" height="32" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.5" class="group-hover:fill-emerald-950 transition-all"/>
+              <text x="435" y="270" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">Working Reg (W)</text>
+            </g>
+
+            <!-- Internal Buses / Arrows -->
+            <!-- IR to Decoder -->
+            <path d="M 140 185 L 180 240" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <!-- IR Address to RAM Addressing -->
+            <path d="M 140 135 L 430 72" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#arrow-indigo)"/>
+            <!-- IR Literal Operand to ALU / MUX -->
+            <path d="M 140 155 L 350 195" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <!-- MUX to ALU Operand 2 -->
+            <path d="M 445 160 L 445 180" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <!-- ALU Result to W Register & RAM -->
+            <path d="M 410 225 L 410 250" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+            <path d="M 410 225 L 410 238 L 570 238 L 570 72 L 550 72" stroke="#f59e0b" stroke-width="1.5" fill="none" stroke-dasharray="3"/>
+            <!-- W Reg feedback to ALU Operand 1 -->
+            <path d="M 380 266 L 335 266 L 335 200 L 350 200" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#arrow-emerald)"/>
+
+            <!-- External Signal Inputs at Bottom -->
+            <!-- Clock -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('signals')" onmouseenter="inspectCpuBlock('signals')">
+              <path d="M 180 340 L 180 310" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-emerald)"/>
+              <text x="180" y="352" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">Clock Frequency</text>
+            </g>
+
+            <!-- Reset (NU) -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('signals')" onmouseenter="inspectCpuBlock('signals')">
+              <path d="M 350 340 L 350 310" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)"/>
+              <text x="350" y="352" text-anchor="middle" fill="#fca5a5" font-size="10" font-weight="bold">Reset (NU)</text>
+            </g>
+
+            <!-- Interrupt Request -->
+            <g class="cursor-pointer group" onclick="inspectCpuBlock('signals')" onmouseenter="inspectCpuBlock('signals')">
+              <path d="M 500 340 L 500 310" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+              <text x="500" y="352" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">Interrupt Requests</text>
+            </g>
+
+            <!-- Arrow Markers -->
+            <defs>
+              <marker id="arrow-down" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+              </marker>
+              <marker id="arrow-indigo-down" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#818cf8"/>
+              </marker>
+              <marker id="arrow-emerald" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
+              </marker>
+              <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Dynamic Block Inspector Panel -->
+      <div id="block-inspector" class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+        <div class="flex items-center gap-2">
+          <span id="inspect-title" class="text-sm font-bold text-sky-400">Program Counter (PC)</span>
+          <span id="inspect-tag" class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-mono">Address Controller</span>
+        </div>
+        <p id="inspect-desc" class="text-xs text-slate-300 leading-relaxed">
+          Maintains the program execution pointer and drives address buses to program memory cells during fetch cycles.
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: ALU OPERATIONS, MUX & DESTINATION ROUTING -->
+    <section id="slide-4" class="slide-content hidden slide-enter space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+        <i data-lucide="calculator" class="w-3.5 h-3.5"></i> Module 4: ALU Execution & Routing
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">ALU Pathways, MUX & Result Destinations</h2>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        The ALU executes single-operand or dual-operand functions. Operands pass through a Multiplexer (MUX), with computation outcomes directed back to the Working Register ($W$) or RAM memory.
+      </p>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
+          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+            <i data-lucide="split" class="w-4 h-4 text-sky-400"></i> Single vs. Dual Operand Execution
+          </h3>
+          <ul class="text-xs text-slate-400 space-y-2">
+            <li class="flex items-start gap-1.5">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5"></i>
+              <span><strong>Single Operand:</strong> Operation targets either Working Register $W$ or a designated RAM cell directly.</span>
+            </li>
+            <li class="flex items-start gap-1.5">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5"></i>
+              <span><strong>Dual Operand:</strong> Operand 1 comes from Working Register $W$, while Operand 2 is routed via the Multiplexer (MUX) from RAM or instruction literal constants.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
+          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+            <i data-lucide="corner-down-right" class="w-4 h-4 text-amber-400"></i> Result Destination Logic
+          </h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Every instruction opcode contains a destination flag bit specifying where the result of the ALU operation is written back upon completion:
+          </p>
+          <div class="grid grid-cols-2 gap-2 pt-1 font-mono text-[11px]">
+            <div class="p-2 bg-slate-900 rounded border border-slate-800 text-emerald-400 font-bold">
+              Destination -> W Register
+            </div>
+            <div class="p-2 bg-slate-900 rounded border border-slate-800 text-indigo-400 font-bold">
+              Destination -> RAM Cell
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+        <h3 class="font-bold text-amber-400 text-xs mb-1 flex items-center gap-1.5">
+          <i data-lucide="flag" class="w-3.5 h-3.5"></i> STATUS Register Integration
+        </h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          ALU computations update arithmetic flag bits in the STATUS register (e.g. Zero flag, Carry flag, Digit Carry flag), which conditional branch instructions evaluate for program flow control.
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: SYSTEM RESETS & SAFETY TIMERS -->
+    <section id="slide-5" class="slide-content hidden slide-enter space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">
+        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Module 5: Hardware Protection Timers
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Watchdog Timer (WDT), PWRT & OST</h2>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        Hardware protective timers guarantee software stability, ensure supply rail stabilization, and confirm oscillator signal integrity prior to CPU code execution.
+      </p>
+
+      <!-- SVG Visual Diagram: WDT and Startup Timers -->
+      <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 my-2 flex justify-center">
+        <svg viewBox="0 0 650 150" class="w-full max-w-2xl h-auto">
+          <!-- Timeline Bar -->
+          <rect x="30" y="70" width="590" height="12" rx="6" fill="#1e293b"/>
+          
+          <!-- PWRT Segment -->
+          <rect x="30" y="70" width="180" height="12" rx="6" fill="#10b981"/>
+          <text x="120" y="55" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">PWRT Delay</text>
+          <text x="120" y="102" text-anchor="middle" fill="#94a3b8" font-size="9">Power Rail Voltage Stabilizes</text>
+
+          <!-- OST Segment -->
+          <rect x="210" y="70" width="180" height="12" fill="#0284c7"/>
+          <text x="300" y="55" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="bold">OST Delay</text>
+          <text x="300" y="102" text-anchor="middle" fill="#94a3b8" font-size="9">Oscillator Frequency Stabilizes</text>
+
+          <!-- CPU Execution Start -->
+          <rect x="390" y="70" width="230" height="12" rx="6" fill="#818cf8"/>
+          <text x="505" y="55" text-anchor="middle" fill="#a5b4fc" font-size="11" font-weight="bold">CPU Code Execution</text>
+          <text x="505" y="102" text-anchor="middle" fill="#94a3b8" font-size="9">Software Runs / Clears WDT</text>
+
+          <!-- WDT Protection Box -->
+          <rect x="420" y="118" width="170" height="26" rx="6" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+          <text x="505" y="135" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="bold">WDT Monitor (Internal RC)</text>
+        </svg>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-3">
+        <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
+          <h3 class="font-bold text-purple-400 text-xs mb-1">Watchdog Timer (WDT)</h3>
+          <p class="text-[11px] text-slate-400 leading-relaxed">Runs independently via dedicated internal RC oscillator. Triggers system reset if software loops freeze and fail to issue periodic clear instructions.</p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
+          <h3 class="font-bold text-emerald-400 text-xs mb-1">Power-Up Timer (PWRT)</h3>
+          <p class="text-[11px] text-slate-400 leading-relaxed">Holds CPU in reset state for a fixed duration after power connection to allow supply voltage ($V_{DD}$) to reach operational levels.</p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
+          <h3 class="font-bold text-sky-400 text-xs mb-1">Oscillator Start-up Timer (OST)</h3>
+          <p class="text-[11px] text-slate-400 leading-relaxed">Delays execution for a set count of clock cycles following PWRT expiration, ensuring crystal clock amplitude and frequency lock in.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: CLOCK, POWER MODES & INTERRUPTS -->
+    <section id="slide-6" class="slide-content hidden slide-enter space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">
+        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Module 6: Clocking & Low-Power Operation
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Clock Generator & Power Management (SLEEP)</h2>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        The clock generator supplies periodic timing pulses that dictate CPU instruction speed. Low-power execution modes (SLEEP/STOP) halt clocks to conserve energy.
+      </p>
+
+      <!-- SVG Visual Diagram: Clock & Sleep Transition -->
+      <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 my-2 flex justify-center">
+        <svg viewBox="0 0 650 150" class="w-full max-w-2xl h-auto">
+          <!-- Active Clock Wave -->
+          <path d="M 30 50 L 60 50 L 60 20 L 90 20 L 90 50 L 120 50 L 120 20 L 150 20 L 150 50 L 180 50 L 180 20 L 210 20 L 210 50" stroke="#10b981" stroke-width="2.5" fill="none"/>
+          <text x="120" y="70" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">Active System Clock</text>
+
+          <!-- SLEEP Instruction Box -->
+          <rect x="230" y="20" width="140" height="40" rx="8" fill="#0f172a" stroke="#6366f1" stroke-width="2"/>
+          <text x="300" y="44" text-anchor="middle" fill="#a5b4fc" font-size="11" font-weight="bold">SLEEP Instruction</text>
+
+          <!-- Flatline Sleep Wave -->
+          <path d="M 390 50 L 620 50" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4" fill="none"/>
+          <text x="505" y="70" text-anchor="middle" fill="#fca5a5" font-size="11" font-weight="bold">Clock Disabled (Ultra Low Current)</text>
+
+          <!-- Wakeup triggers -->
+          <rect x="390" y="95" width="230" height="40" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+          <text x="505" y="112" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="bold">Wake-up Sources</text>
+          <text x="505" y="127" text-anchor="middle" fill="#94a3b8" font-size="9">Interrupts / WDT Timeout / MCLR Line</text>
+        </svg>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+          <h3 class="font-bold text-white text-sm mb-1 flex items-center gap-2">
+            <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i> Clock Speed & Throughput
+          </h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Higher oscillator clock frequencies yield proportionally higher CPU instruction throughput (MIPS). Oscillators can be internal or driven by external quartz crystals.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+          <h3 class="font-bold text-white text-sm mb-1 flex items-center gap-2">
+            <i data-lucide="moon" class="w-4 h-4 text-indigo-400"></i> Power Saving (SLEEP Mode)
+          </h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Halts internal core clocks, reducing power consumption to microamps. System exits SLEEP upon receiving peripheral interrupts, WDT timeout, or external resets.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: INTERACTIVE QUIZ -->
+    <section id="slide-7" class="slide-content hidden slide-enter space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Knowledge Assessment
+        </div>
+        <div class="text-sm font-semibold text-slate-300">
+          Score: <span id="quiz-score" class="text-emerald-400 font-bold">0</span> / <span id="quiz-total">8</span>
+        </div>
+      </div>
+
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Interactive Knowledge Assessment</h2>
+
+      <div id="quiz-container" class="space-y-4 max-h-[380px] overflow-y-auto pr-2 custom-scrollbar">
+        <!-- Dynamic Questions Injected via JS -->
+      </div>
+    </section>
+
+    <!-- Slide Navigation Buttons -->
+    <div class="pt-6 mt-4 border-t border-slate-800/80 flex items-center justify-between">
+      <button id="prev-btn" onclick="changeSlide(-1)" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+        <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous
+      </button>
+
+      <!-- Slide Dots -->
+      <div id="slide-dots" class="hidden sm:flex items-center space-x-2">
+        <!-- Dots generated by JS -->
+      </div>
+
+      <button id="next-btn" onclick="changeSlide(1)" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs sm:text-sm font-semibold transition-all shadow-lg shadow-sky-600/20">
+        Next <i data-lucide="chevron-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+  </div>
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-slate-800/60 bg-slate-950 py-3 text-center text-xs text-slate-500">
+  Microcontroller Architecture Lecture Deck &bull; Use Left/Right Arrow Keys to Navigate
+</footer>
+
+<!-- Embedded Application Logic -->
+<script>
+  let currentSlide = 1;
+  const totalSlides = 7;
+
+  const slideTitles = [
+    "Program Memory & Stack",
+    "Data Memory & Banking",
+    "Interactive CPU Core",
+    "ALU & Destination Routing",
+    "System Resets & Timers",
+    "Clocking & Low-Power",
+    "Comprehensive Assessment"
+  ];
+
+  const cpuBlockDetails = {
+    pc: {
+      title: "Program Counter (PC)",
+      tag: "Address Controller",
+      desc: "Generates instruction memory addresses and drives the address bus to fetch code from Program Memory sequentially."
+    },
+    stack: {
+      title: "Hardware Stack",
+      tag: "Subroutine Storage",
+      desc: "Independent hardware memory that automatically saves PC return addresses during subroutine CALLs and interrupts."
+    },
+    ir: {
+      title: "Instruction Register (IR)",
+      tag: "Fetch Latch",
+      desc: "Latches fetched machine instructions from Program Memory prior to decoding opcode and operand fields."
+    },
+    ram_addr: {
+      title: "RAM Addressing Unit",
+      tag: "Data Memory Controller",
+      desc: "Formulates target data RAM cell addresses using bank selection bits combined with instruction register address offsets."
+    },
+    decoder: {
+      title: "Instruction Decoder & Control Logic",
+      tag: "Core Controller",
+      desc: "Decodes opcodes to issue timing and hardware execution control signals across internal CPU buses."
+    },
+    mux: {
+      title: "Multiplexer (MUX)",
+      tag: "Operand Router",
+      desc: "Routes incoming ALU Operand 2 from either RAM data cells or literal instruction values based on opcode type."
+    },
+    status: {
+      title: "STATUS Register",
+      tag: "Flag Register",
+      desc: "Holds arithmetic status flags (Zero, Carry, Digit Carry) updated by ALU operations for conditional branching."
+    },
+    alu: {
+      title: "Arithmetic Logic Unit (ALU)",
+      tag: "Execution Unit",
+      desc: "Performs mathematical and logical calculations on single or dual operands (combining Working Register W and MUX input)."
+    },
+    w_reg: {
+      title: "Working Register (W)",
+      tag: "CPU Accumulator",
+      desc: "Primary CPU register serving as implicit Operand 1 in dual-operand ALU operations and temporary storage."
+    },
+    signals: {
+      title: "External Control Signals",
+      tag: "System Inputs",
+      desc: "Clock Frequency dictates execution timing; Reset (NU) re-initializes core; Interrupt Requests pause main program flow."
+    }
+  };
+
+  const quizData = [
+    {
+      question: "Which component stores the return address during a subroutine call (CALL) or interrupt?",
+      options: ["Working Register (W)", "Hardware Stack", "Instruction Register (IR)", "STATUS Register"],
+      correct: 1,
+      explanation: "The hardware Stack automatically saves the Program Counter (PC) value on subroutine calls and restores it upon execution of a RETURN instruction."
+    },
+    {
+      question: "In dual-operand ALU operations, where does Operand 1 originate?",
+      options: ["Directly from Program Flash Memory", "Working Register (W)", "Multiplexer (MUX)", "Stack Pointer"],
+      correct: 1,
+      explanation: "For dual-operand ALU functions, Operand 1 is supplied implicitly by the Working Register (W), while Operand 2 comes via the MUX."
+    },
+    {
+      question: "What is the function of Special Function Registers (SFRs) in Data Memory?",
+      options: [
+        "Storing user application variables",
+        "Controlling and monitoring hardware peripherals and core logic",
+        "Storing executable machine instruction codes",
+        "Tracking call return addresses"
+      ],
+      correct: 1,
+      explanation: "SFRs are mapped to memory banks to control hardware peripherals like I/O ports, timers, and CPU status flags."
+    },
+    {
+      question: "How does Banked Addressing select a target cell in Data RAM?",
+      options: [
+        "By using bit mask filters on the Instruction Register",
+        "By combining Bank Select bits with an offset address in the active bank",
+        "By reading addresses from the Hardware Stack",
+        "By shifting the Program Counter value"
+      ],
+      correct: 1,
+      explanation: "Banked addressing uses upper Bank Select bits to pick the active memory bank and lower offset bits to select the exact register inside that bank."
+    },
+    {
+      question: "What happens when the Watchdog Timer (WDT) times out without being periodically cleared by software?",
+      options: [
+        "The CPU enters SLEEP mode permanently",
+        "The CPU triggers a hardware system Reset",
+        "The ALU shifts to single-operand mode",
+        "Program Memory clears its contents"
+      ],
+      correct: 1,
+      explanation: "The WDT runs independently. If the code freezes in a loop and fails to issue periodic clear instructions, the WDT triggers a core system Reset to recover."
+    },
+    {
+      question: "What is the primary role of the Power-Up Timer (PWRT)?",
+      options: [
+        "To increase CPU clock frequency during startup",
+        "To hold the CPU in reset until supply voltage reaches operational levels",
+        "To count instruction cycles in a loop",
+        "To decode multi-byte opcodes"
+      ],
+      correct: 1,
+      explanation: "The Power-Up Timer (PWRT) holds the core in reset for a fixed duration to ensure power rail voltage stabilizes fully prior to execution."
+    },
+    {
+      question: "What occurs when the microcontroller executes a SLEEP instruction?",
+      options: [
+        "System clock stops and CPU power consumption drops to microamps",
+        "Program Counter resets to address 0x00",
+        "Data RAM contents are cleared",
+        "Watchdog Timer is permanently disabled"
+      ],
+      correct: 0,
+      explanation: "SLEEP mode halts internal system clock generators, placing the processor in an ultra-low power state until woken up by an interrupt, reset, or WDT timeout."
+    },
+    {
+      question: "Where can ALU operation results be stored based on the instruction opcode destination bit?",
+      options: [
+        "Only in the STATUS register",
+        "Either in the Working Register (W) or a targeted Data RAM register",
+        "Only in Program Memory",
+        "In the Instruction Register (IR)"
+      ],
+      correct: 1,
+      explanation: "Instructions contain a destination flag that routes the output of the ALU either back to the accumulator (W) or to the designated RAM location."
+    }
+  ];
+
+  let userAnswers = {};
+
+  function inspectCpuBlock(blockKey) {
+    const info = cpuBlockDetails[blockKey];
+    if (!info) return;
+    document.getElementById('inspect-title').innerText = info.title;
+    document.getElementById('inspect-tag').innerText = info.tag;
+    document.getElementById('inspect-desc').innerText = info.desc;
+  }
+
+  function updateSlideUI() {
+    for (let i = 1; i <= totalSlides; i++) {
+      const slide = document.getElementById(`slide-${i}`);
+      if (slide) slide.classList.add('hidden');
+    }
+
+    const activeSlide = document.getElementById(`slide-${currentSlide}`);
+    if (activeSlide) activeSlide.classList.remove('hidden');
+
+    const percentage = (currentSlide / totalSlides) * 100;
+    document.getElementById('progress-bar').style.width = `${percentage}%`;
+    document.getElementById('slide-number').innerText = `Slide ${currentSlide} of ${totalSlides}`;
+    document.getElementById('slide-title-preview').innerText = slideTitles[currentSlide - 1];
+
+    document.getElementById('prev-btn').disabled = (currentSlide === 1);
+    const nextBtn = document.getElementById('next-btn');
+    if (currentSlide === totalSlides) {
+      nextBtn.classList.add('hidden');
+    } else {
+      nextBtn.classList.remove('hidden');
+    }
+
+    renderDots();
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function changeSlide(direction) {
+    currentSlide += direction;
+    if (currentSlide < 1) currentSlide = 1;
+    if (currentSlide > totalSlides) currentSlide = totalSlides;
+    updateSlideUI();
+  }
+
+  function goToSlide(slideNum) {
+    currentSlide = slideNum;
+    updateSlideUI();
+  }
+
+  function renderDots() {
+    const dotsContainer = document.getElementById('slide-dots');
+    if (!dotsContainer) return;
+    dotsContainer.innerHTML = '';
+
+    for (let i = 1; i <= totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = `w-2.5 h-2.5 rounded-full transition-all ${i === currentSlide ? 'bg-sky-400 w-6' : 'bg-slate-700 hover:bg-slate-600'}`;
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === "ArrowRight") changeSlide(1);
+    if (event.key === "ArrowLeft") changeSlide(-1);
+  });
+
+  function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    quizData.forEach((q, qIndex) => {
+      const questionBox = document.createElement('div');
+      questionBox.className = 'p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3';
+
+      let optionsHTML = '';
+      q.options.forEach((opt, oIndex) => {
+        const isSelected = userAnswers[qIndex] === oIndex;
+        const isSubmitted = userAnswers[qIndex] !== undefined;
+
+        let btnClass = 'w-full text-left p-2.5 rounded-lg border text-xs sm:text-sm transition-all flex items-center justify-between ';
+
+        if (isSubmitted) {
+          if (oIndex === q.correct) {
+            btnClass += 'bg-emerald-500/20 border-emerald-500/50 text-emerald-200 font-medium';
+          } else if (isSelected && oIndex !== q.correct) {
+            btnClass += 'bg-rose-500/20 border-rose-500/50 text-rose-200';
+          } else {
+            btnClass += 'bg-slate-900/40 border-slate-800 text-slate-500 opacity-60';
+          }
+        } else {
+          btnClass += 'bg-slate-900/80 border-slate-800 hover:border-sky-500/50 text-slate-300';
+        }
+
+        optionsHTML += `
+          <button onclick="selectOption(${qIndex}, ${oIndex})" ${isSubmitted ? 'disabled' : ''} class="${btnClass}">
+            <span>${opt}</span>
+            ${isSubmitted && oIndex === q.correct ? '<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>' : ''}
+            ${isSubmitted && isSelected && oIndex !== q.correct ? '<i data-lucide="x" class="w-4 h-4 text-rose-400"></i>' : ''}
+          </button>
+        `;
+      });
+
+      let explanationHTML = '';
+      if (userAnswers[qIndex] !== undefined) {
+        explanationHTML = `
+          <div class="mt-2 p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs text-slate-400 flex items-start gap-2">
+            <i data-lucide="info" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+            <span>${q.explanation}</span>
+          </div>
+        `;
+      }
+
+      questionBox.innerHTML = `
+        <h3 class="font-semibold text-white text-xs sm:text-sm">${qIndex + 1}. ${q.question}</h3>
+        <div class="space-y-2">${optionsHTML}</div>
+        ${explanationHTML}
+      `;
+
+      container.appendChild(questionBox);
+    });
+
+    calculateScore();
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function selectOption(questionIndex, optionIndex) {
+    userAnswers[questionIndex] = optionIndex;
+    renderQuiz();
+  }
+
+  function calculateScore() {
+    let score = 0;
+    quizData.forEach((q, idx) => {
+      if (userAnswers[idx] === q.correct) score++;
+    });
+    document.getElementById('quiz-score').innerText = score;
+    document.getElementById('quiz-total').innerText = quizData.length;
+  }
+
+  window.onload = function() {
+    updateSlideUI();
+    renderQuiz();
+  };
+</script>
+</body>
+</html>
